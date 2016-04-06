@@ -1,32 +1,53 @@
 import random
 
 ##########################################################
+boardState = [['.' for x in range(5)] for x in range(6)]
+whoseTurn = 'W'
+gameCounter = 1
 
 def chess_reset():
 	# reset the state of the game / your internal variables - note that this function is highly dependent on your implementation
-	
-	pass
+	global boardState
+	global whoseTurn
+	global gameCounter
+	boardState[0] = ['k','q','b','n','r']
+	boardState[1] = ['p','p','p','p','p']
+	boardState[2] = ['.','.','.','.','.']
+	boardState[3] = ['.','.','.','.','.']
+	boardState[4] = ['P','P','P','P','P']
+	boardState[5] = ['R','N','B','Q','K']
+	whoseTurn = 'W'
+	gameCounter = 1
+
+
+
 
 def chess_boardGet():
 	# return the state of the game - one example is given below - note that the state has exactly 40 or 41 characters
 	
 	strOut = ''
-	
-	strOut += '1 W\n'
-	strOut += 'kqbnr\n'
-	strOut += 'ppppp\n'
-	strOut += '.....\n'
-	strOut += '.....\n'
-	strOut += 'PPPPP\n'
-	strOut += 'RNBQK\n'
-	
+	strOut = str(gameCounter) + ' ' + whoseTurn + '\n'
+	for i in xrange(0,6):
+		for j in xrange(0,5):
+			strOut += boardState[i][j]
+		strOut += '\n'
 	return strOut
 
 
 def chess_boardSet(strIn):
 	# read the state of the game from the provided argument and set your internal variables accordingly - note that the state has exactly 40 or 41 characters
 	
-	pass
+	global boardState
+	global whoseTurn
+	global gameCounter
+	strIn = str(strIn)
+	tempStr = str.split(strIn)
+	gameCounter = int(tempStr[0])
+	whoseTurn = tempStr[1]
+	for i in xrange(0,6):
+		for j in xrange(0,5):
+			boardState[i][j] = tempStr[i+2][j]
+
 
 
 def chess_winner():
