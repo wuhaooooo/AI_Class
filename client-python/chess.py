@@ -52,8 +52,26 @@ def chess_boardSet(strIn):
 
 def chess_winner():
 	# determine the winner of the current state of the game and return '?' or '=' or 'W' or 'B' - note that we are returning a character and not a string
+	wKing = 0
+	bKing = 0
 	
-	return '?'
+	if gameCounter > 40:
+		return '='
+
+	for i in xrange(0,6):
+		for j in xrange(0,5):	
+			if(boardState[i][j] == 'k'):
+				bKing = 1
+			if(boardState[i][j] == 'K'):
+				wKing = 1
+
+	if bKing == 1 and wKing == 1:
+		return '?'
+	elif (bKing == 1):
+		return 'B'
+	else:
+		return 'W'
+
 
 
 def chess_isValid(intX, intY):
@@ -74,19 +92,26 @@ def chess_isValid(intX, intY):
 
 def chess_isEnemy(strPiece):
 	# with reference to the state of the game, return whether the provided argument is a piece from the side not on move - note that we could but should not use the other is() functions in here but probably
-	
+	if whoseTurn == 'W' and strPiece.islower():
+		return True
+	if whoseTurn == 'B' and strPiece.isupper():
+		return True
 	return False
 
 
 def chess_isOwn(strPiece):
 	# with reference to the state of the game, return whether the provided argument is a piece from the side on move - note that we could but should not use the other is() functions in here but probably
-	
+	if whoseTurn == 'W' and strPiece.isupper():
+		return True
+	if whoseTurn == 'B' and strPiece.islower():
+		return True	
 	return False
 
 
 def chess_isNothing(strPiece):
 	# return whether the provided argument is not a piece / is an empty field - note that we could but should not use the other is() functions in here but probably
-	
+	if strPiece == '.':
+		return True
 	return False
 
 
