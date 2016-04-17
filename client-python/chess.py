@@ -135,19 +135,45 @@ def chess_moves():
             if false create a string 'a2-a3'
             convert x,y to a2 by calling hao_myIndex2String(y, x)
             convert x+1,y to a3 by calling hao_myIndex2String(y, x)
-            appent that string
+            append that string
+    -------------------------------------------
+    whoseTurn = 'W'
+    boardState[0] = ['k', 'q', 'b', 'n', 'r']
+    boardState[1] = ['p', 'p', 'p', 'p', 'p']
+    boardState[2] = ['.', '.', '.', '.', '.']
+    boardState[3] = ['.', '.', '.', '.', '.']
+    boardState[4] = ['P', 'P', 'P', 'P', 'P']
+    boardState[5] = ['R', 'N', 'B', 'Q', 'K']
     """
-
     strOut = []
+    # Pawns default is lower 'p'
+    target = 'p'
+    if whoseTurn == 'W':
+        target = 'P'
 
-    strOut.append('a2-a3\n')
-    strOut.append('b2-b3\n')
-    strOut.append('c2-c3\n')
-    strOut.append('d2-d3\n')
-    strOut.append('e2-e3\n')
-    strOut.append('b1-a3\n')
-    strOut.append('b1-c3\n')
+    for i in xrange(0, 6):
+        for j in xrange(0, 5):
+            if (boardState[i][j] == target):
+                if(target == 'p'):
+                    ii = i + 1
+                else:
+                    ii = i - 1
+                if(chess_isValid(j, ii) == True):
+                    if(chess_isOwn(boardState[ii][j]) == False):
+                        strAppend = hao_myIndex2String(i,j) + '-' + hao_myIndex2String(ii,j) + '\n'
+                        strOut.append(strAppend)
 
+
+
+    #
+    # strOut.append('a2-a3\n')
+    # strOut.append('b2-b3\n')
+    # strOut.append('c2-c3\n')
+    # strOut.append('d2-d3\n')
+    # strOut.append('e2-e3\n')
+    # strOut.append('b1-a3\n')
+    # strOut.append('b1-c3\n')
+    print strOut
     return strOut
 
 
