@@ -489,6 +489,28 @@ def hao_myIndex2String(theRow, theCol):
     col = colConvert.get(theCol, "")
     return col + row
 
+def hao_String2myIndex(strIn):
+    # convert chess index to my board index
+    # example "a2" --> (4,0)
+    rowConvert = {
+        '6': 0,
+        '5': 1,
+        '4': 2,
+        '3': 3,
+        '2': 4,
+        '1': 5,
+    }
+    ii = rowConvert.get(strIn[1], -1)
+
+    colConvert = {
+        'a': 0,
+        'b': 1,
+        'c': 2,
+        'd': 3,
+        'e': 4,
+    }
+    jj = colConvert.get(strIn[0], -1)
+    return ii, jj
 
 def chess_movesShuffled():
     # with reference to the state of the game, determine the possible moves and shuffle them before returning them- note that you can call the chess_moves() function in here
@@ -506,7 +528,25 @@ def chess_move(strIn):
     """ Performs the provided move
         The provided move is in a well defined format
         the board/state and therefore the internal variables need to be updated accordingly"""
-    pass
+    global whoseTurn
+    global gameCounter
+    theMoves = chess_moves()
+    ss = str(strIn).split("-")
+    iStart, jStart = hao_String2myIndex(ss[0])
+    iEnd, jEnd = hao_String2myIndex(ss[1])
+    ss = hao_myIndex2String(iStart, jStart) + '-' + hao_myIndex2String(iEnd, jEnd) + '\n'
+    if ss in theMoves:
+        boardState[iEnd][jEnd] = boardState[iStart][jStart]
+        boardState[iStart][jStart] = '.'
+        if boardState[iEnd][jEnd] == 'p' and iEnd == 5:
+            boardState[iEnd][jEnd] = 'q'
+        if boardState[iEnd][jEnd] == 'P' and iEnd == 0:
+            boardState[iEnd][jEnd] = 'Q'
+    if whoseTurn == 'W':
+        whoseTurn = 'B'
+    elif whoseTurn == 'B':
+        whoseTurn = 'W'
+        gameCounter += 1
 
 
 def chess_moveRandom():
