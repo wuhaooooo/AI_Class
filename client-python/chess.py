@@ -176,16 +176,15 @@ def chess_moves():
                 elif boardState[i][j] == 'k':
                     hao_kingMovesPrint(i, j, strOut)
 
-    print strOut
     return strOut
 
 def hao_queenMovesPrint(i, j, strOut):
-    theMoves = hao_bishopMoves(i, j)
+    theMoves = hao_queenMoves(i, j)
     for x in theMoves:
-        if chess_isValid(x[1], x[0]):
-            if not chess_isOwn(boardState[x[0]][x[1]]):
-                strAppend = hao_myIndex2String(i, j) + '-' + hao_myIndex2String(x[0], x[1]) + '\n'
-                strOut.append(strAppend)
+        # if chess_isValid(x[1], x[0]):
+        #     if not chess_isOwn(boardState[x[0]][x[1]]):
+        strAppend = hao_myIndex2String(i, j) + '-' + hao_myIndex2String(x[0], x[1]) + '\n'
+        strOut.append(strAppend)
 
 def hao_queenMoves(ii, jj):
     res = []
@@ -201,41 +200,57 @@ def hao_queenMoves(ii, jj):
         # for up
         if u and chess_isValid(jj, ii - x) and not chess_isOwn(boardState[ii - x][jj]):
             res.append((ii - x, jj))
+            if not chess_isNothing(boardState[ii - x][jj]):
+                u = False
         else:
             u = False
         # for down
         if d and chess_isValid(jj, ii + x) and not chess_isOwn(boardState[ii + x][jj]):
             res.append((ii + x, jj))
+            if not chess_isNothing(boardState[ii + x][jj]):
+                d = False
         else:
             d = False
         # for left
         if l and chess_isValid(jj - x, ii) and not chess_isOwn(boardState[ii][jj - x]):
             res.append((ii, jj - x))
+            if not chess_isNothing(boardState[ii][jj-x]):
+                l = False
         else:
             l = False
         # for right
         if r and chess_isValid(jj + x, ii) and not chess_isOwn(boardState[ii][jj + x]):
             res.append((ii, jj + x))
+            if not chess_isNothing(boardState[ii][jj+x]):
+                r = False
         else:
             r = False
         # for up left
         if ul and chess_isValid(jj - x, ii - x) and not chess_isOwn(boardState[ii - x][jj - x]):
             res.append((ii - x, jj - x))
+            if not chess_isNothing(boardState[ii - x][jj - x]):
+                ul = False
         else:
             ul = False
         # for up right
         if ur and chess_isValid(jj + x, ii - x) and not chess_isOwn(boardState[ii - x][jj + x]):
             res.append((ii - x, jj + x))
+            if not chess_isNothing(boardState[ii - x][jj + x]):
+                ur = False
         else:
             ur = False
         # for down left
         if dl and chess_isValid(jj - x, ii + x) and not chess_isOwn(boardState[ii + x][jj - x]):
             res.append((ii + x, jj - x))
+            if not chess_isNothing(boardState[ii + x][jj - x]):
+                dl = False
         else:
             dl = False
         # for down right
         if dr and chess_isValid(jj + x, ii + x) and not chess_isOwn(boardState[ii + x][jj + x]):
             res.append((ii + x, jj + x))
+            if not chess_isNothing(boardState[ii + x][jj + x]):
+                dr = False
         else:
             dr = False
 
@@ -261,21 +276,29 @@ def hao_bishopMoves(ii, jj):
         # for up left
         if ul and chess_isValid(jj - x, ii - x) and not chess_isOwn(boardState[ii - x][jj - x]):
             res.append((ii - x, jj - x))
+            if not chess_isNothing(boardState[ii - x][jj - x]):
+                ul = False
         else:
             ul = False
         # for up right
         if ur and chess_isValid(jj + x, ii - x) and not chess_isOwn(boardState[ii - x][jj + x]):
             res.append((ii - x, jj + x))
+            if not chess_isNothing(boardState[ii - x][jj + x]):
+                ur = False
         else:
             ur = False
         # for down left
         if dl and chess_isValid(jj - x, ii + x) and not chess_isOwn(boardState[ii + x][jj - x]):
             res.append((ii + x, jj - x))
+            if not chess_isNothing(boardState[ii + x][jj - x]):
+                dl = False
         else:
             dl = False
         # for down right
         if dr and chess_isValid(jj + x, ii + x) and not chess_isOwn(boardState[ii + x][jj + x]):
             res.append((ii + x, jj + x))
+            if not chess_isNothing(boardState[ii + x][jj + x]):
+                dr = False
         else:
             dr = False
     # up
@@ -310,23 +333,31 @@ def hao_rookMoves(ii, jj):
     r = True
     for x in range(1, 6):
         # for up
-        if u and chess_isValid(jj, ii-x) and not chess_isOwn(boardState[ii-x][jj]):
+        if u and chess_isValid(jj, ii - x) and not chess_isOwn(boardState[ii - x][jj]):
             res.append((ii - x, jj))
+            if not chess_isNothing(boardState[ii - x][jj]):
+                u = False
         else:
             u = False
         # for down
-        if d and chess_isValid(jj, ii + x) and not chess_isOwn(boardState[ii+x][jj]):
+        if d and chess_isValid(jj, ii + x) and not chess_isOwn(boardState[ii + x][jj]):
             res.append((ii + x, jj))
+            if not chess_isNothing(boardState[ii + x][jj]):
+                d = False
         else:
             d = False
         # for left
-        if l and chess_isValid(jj - x, ii) and not chess_isOwn(boardState[ii][jj-x]):
+        if l and chess_isValid(jj - x, ii) and not chess_isOwn(boardState[ii][jj - x]):
             res.append((ii, jj - x))
+            if not chess_isNothing(boardState[ii][jj - x]):
+                l = False
         else:
             l = False
         # for right
-        if r and chess_isValid(jj + x, ii) and not chess_isOwn(boardState[ii][jj+x]):
+        if r and chess_isValid(jj + x, ii) and not chess_isOwn(boardState[ii][jj + x]):
             res.append((ii, jj + x))
+            if not chess_isNothing(boardState[ii][jj + x]):
+                r = False
         else:
             r = False
     return res
@@ -367,7 +398,6 @@ def hao_knightMovesPrint(i, j, strOut):
 
 
 def hao_knightMoves(ii, jj):
-    # generating all pawns move
     # whoseTurn = 'W'
     # boardState[0] = ['k', 'q', 'b', 'n', 'r']
     # boardState[1] = ['p', 'p', 'p', 'p', 'p']
@@ -393,14 +423,14 @@ def hao_pawnMovesPrint(target, i, j, strOut):
     theMoves = hao_pawnMoves(target, i, j)
     for x in theMoves:
         if chess_isValid(x[1], x[0]):
-            if not chess_isOwn(boardState[x[0]][x[1]]):
+            if chess_isNothing(boardState[x[0]][x[1]]):
                 strAppend = hao_myIndex2String(i, j) + '-' + hao_myIndex2String(x[0], x[1]) + '\n'
                 strOut.append(strAppend)
 
     theMoves = hao_pawnCaptures(target, i, j)
     for x in theMoves:
         if chess_isValid(x[1], x[0]):
-            if not chess_isEnemy(boardState[x[0]][x[1]]):
+            if chess_isEnemy(boardState[x[0]][x[1]]):
                 strAppend = hao_myIndex2String(i, j) + '-' + hao_myIndex2String(x[0], x[1]) + '\n'
                 strOut.append(strAppend)
 
