@@ -146,11 +146,63 @@ def chess_moves():
     boardState[5] = ['R', 'N', 'B', 'Q', 'K']
     """
     strOut = []
-    # Pawns default is lower 'p'
+    # Pawns
+    hao_pawnMovesPrint(strOut)
+    # Knight
+    hao_knightMovesPrint(strOut)
+    # King
+    hao_kingMovesPrint(strOut)
+    # Queen
+    hao_queenMovesPrint(strOut)
+    print strOut
+    return strOut
+
+
+def hao_queenMovesPrint(strOut):
+    pass
+
+def hao_queenMoves(ii, jj):
+    # generating all queens move
+    res = []
+
+
+def hao_kingMovesPrint(strOut):
+    target = 'k'
+    if whoseTurn == 'W':
+        target = 'K'
+    for i in xrange(0, 6):
+        for j in xrange(0, 5):
+            if boardState[i][j] == target:
+                theMoves = hao_kingMoves(i, j)
+                for x in theMoves:
+                    if (chess_isValid(x[1], x[0])):
+                        if not chess_isOwn(boardState[x[0]][x[1]]):
+                            strAppend = hao_myIndex2String(i, j) + '-' + hao_myIndex2String(x[0], x[1]) + '\n'
+                            strOut.append(strAppend)
+
+
+def hao_kingMoves(ii, jj):
+    # generating all kings move
+    res = []
+    # ii-1
+    res.append((ii - 1, jj - 1))
+    res.append((ii - 1, jj))
+    res.append((ii - 1, jj + 1))
+    # ii
+    res.append((ii, jj - 1))
+    res.append((ii, jj + 1))
+    # ii + 1
+    res.append((ii + 1, jj - 1))
+    res.append((ii + 1, jj))
+    res.append((ii + 1, jj + 1))
+
+    return res
+
+
+def hao_pawnMovesPrint(strOut):
     target = 'p'
     if whoseTurn == 'W':
         target = 'P'
-
     for i in xrange(0, 6):
         for j in xrange(0, 5):
             if boardState[i][j] == target:
@@ -160,7 +212,20 @@ def chess_moves():
                         if not chess_isOwn(boardState[x[0]][x[1]]):
                             strAppend = hao_myIndex2String(i, j) + '-' + hao_myIndex2String(x[0], x[1]) + '\n'
                             strOut.append(strAppend)
-    # Knight default is lower 'n'
+
+
+# need to fix !!!!!!!!!!!!!!!
+def hao_pawnMoves(theTarget, ii, jj):
+    # generating all pawns move
+    res = []
+    if theTarget == 'p':
+        res.append((ii + 1, jj))
+    else:
+        res.append((ii - 1, jj))
+    return res
+
+
+def hao_knightMovesPrint(strOut):
     target = 'n'
     if whoseTurn == 'W':
         target = 'N'
@@ -173,9 +238,6 @@ def chess_moves():
                         if not chess_isOwn(boardState[x[0]][x[1]]):
                             strAppend = hao_myIndex2String(i, j) + '-' + hao_myIndex2String(x[0], x[1]) + '\n'
                             strOut.append(strAppend)
-
-    print strOut
-    return strOut
 
 
 def hao_knightMoves(ii, jj):
@@ -198,16 +260,6 @@ def hao_knightMoves(ii, jj):
     res.append((ii + 2, jj - 1))
     res.append((ii + 2, jj + 1))
     res.append((ii + 1, jj + 2))
-    return res
-
-
-def hao_pawnMoves(theTarget, ii, jj):
-    # generating all pawns move
-    res = []
-    if theTarget == 'p':
-        res.append((ii + 1, jj))
-    else:
-        res.append((ii - 1, jj))
     return res
 
 
