@@ -153,28 +153,62 @@ def chess_moves():
 
     for i in xrange(0, 6):
         for j in xrange(0, 5):
-            if (boardState[i][j] == target):
-                if(target == 'p'):
-                    ii = i + 1
-                else:
-                    ii = i - 1
-                if(chess_isValid(j, ii) == True):
-                    if(chess_isOwn(boardState[ii][j]) == False):
-                        strAppend = hao_myIndex2String(i,j) + '-' + hao_myIndex2String(ii,j) + '\n'
-                        strOut.append(strAppend)
+            if boardState[i][j] == target:
+                theMoves = hao_pawnMoves(target, i, j)
+                for x in theMoves:
+                    if chess_isValid(x[1], x[0]):
+                        if not chess_isOwn(boardState[x[0]][x[1]]):
+                            strAppend = hao_myIndex2String(i, j) + '-' + hao_myIndex2String(x[0], x[1]) + '\n'
+                            strOut.append(strAppend)
+    # Knight default is lower 'n'
+    target = 'n'
+    if whoseTurn == 'W':
+        target = 'N'
+    for i in xrange(0, 6):
+        for j in xrange(0, 5):
+            if boardState[i][j] == target:
+                theMoves = hao_knightMoves(i, j)
+                for x in theMoves:
+                    if chess_isValid(x[1], x[0]):
+                        if not chess_isOwn(boardState[x[0]][x[1]]):
+                            strAppend = hao_myIndex2String(i, j) + '-' + hao_myIndex2String(x[0], x[1]) + '\n'
+                            strOut.append(strAppend)
 
-
-
-    #
-    # strOut.append('a2-a3\n')
-    # strOut.append('b2-b3\n')
-    # strOut.append('c2-c3\n')
-    # strOut.append('d2-d3\n')
-    # strOut.append('e2-e3\n')
-    # strOut.append('b1-a3\n')
-    # strOut.append('b1-c3\n')
     print strOut
     return strOut
+
+
+def hao_knightMoves(ii, jj):
+    # generating all pawns move
+    # whoseTurn = 'W'
+    # boardState[0] = ['k', 'q', 'b', 'n', 'r']
+    # boardState[1] = ['p', 'p', 'p', 'p', 'p']
+    # boardState[2] = ['.', '.', '.', '.', '.']
+    # boardState[3] = ['.', '.', '.', '.', '.']
+    # boardState[4] = ['P', 'P', 'P', 'P', 'P']
+    # boardState[5] = ['R', 'N', 'B', 'Q', 'K']
+    res = []
+    # top four
+    res.append((ii - 1, jj - 2))
+    res.append((ii - 2, jj - 1))
+    res.append((ii - 2, jj + 1))
+    res.append((ii - 1, jj + 2))
+    # bottom four
+    res.append((ii + 1, jj - 2))
+    res.append((ii + 2, jj - 1))
+    res.append((ii + 2, jj + 1))
+    res.append((ii + 1, jj + 2))
+    return res
+
+
+def hao_pawnMoves(theTarget, ii, jj):
+    # generating all pawns move
+    res = []
+    if theTarget == 'p':
+        res.append((ii + 1, jj))
+    else:
+        res.append((ii - 1, jj))
+    return res
 
 
 def hao_myIndex2String(theRow, theCol):
@@ -199,7 +233,6 @@ def hao_myIndex2String(theRow, theCol):
     }
     col = colConvert.get(theCol, "")
     return col + row
-
 
 
 def chess_movesShuffled():
