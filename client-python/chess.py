@@ -140,7 +140,6 @@ def chess_eval():
         return wscore - bscore
     else:
         return bscore - wscore
-    return 0
 
 
 def chess_moves():
@@ -148,21 +147,6 @@ def chess_moves():
     """ Determines all the possible moves of the current state
         The input/output is expected to be in a well defined format
         returns a string/array"""
-
-    """For pawn
-       1. determine which side
-       2. find all pawns
-            for loop
-                if board == 'p' or 'P'
-       3. get the index of each 'p'
-       4. create a new position, newPostion, add 1 or deduct 1 to its row
-       5. checkout chess_isValid(x, y) if false, continue
-       6. checkout chess_isOwn(board[y][x]) if true continue
-            if false create a string 'a2-a3'
-            convert x,y to a2 by calling hao_myIndex2String(y, x)
-            convert x+1,y to a3 by calling hao_myIndex2String(y, x)
-            append that string
-    """
     strOut = []
     for i in xrange(0, 6):
         for j in xrange(0, 5):
@@ -199,8 +183,6 @@ def chess_moves():
 def hao_queenMovesPrint(i, j, strOut):
     theMoves = hao_queenMoves(i, j)
     for x in theMoves:
-        # if chess_isValid(x[1], x[0]):
-        #     if not chess_isOwn(boardState[x[0]][x[1]]):
         strAppend = hao_myIndex2String(i, j) + '-' + hao_myIndex2String(x[0], x[1]) + '\n'
         strOut.append(strAppend)
 
@@ -278,10 +260,8 @@ def hao_queenMoves(ii, jj):
 def hao_bishopMovesPrint(i, j, strOut):
     theMoves = hao_bishopMoves(i, j)
     for x in theMoves:
-        if chess_isValid(x[1], x[0]):
-            if not chess_isOwn(boardState[x[0]][x[1]]):
-                strAppend = hao_myIndex2String(i, j) + '-' + hao_myIndex2String(x[0], x[1]) + '\n'
-                strOut.append(strAppend)
+        strAppend = hao_myIndex2String(i, j) + '-' + hao_myIndex2String(x[0], x[1]) + '\n'
+        strOut.append(strAppend)
 
 
 def hao_bishopMoves(ii, jj):
@@ -337,10 +317,8 @@ def hao_bishopMoves(ii, jj):
 def hao_rookMovesPrint(i, j, strOut):
     theMoves = hao_rookMoves(i, j)
     for x in theMoves:
-        if chess_isValid(x[1], x[0]):
-            if not chess_isOwn(boardState[x[0]][x[1]]):
-                strAppend = hao_myIndex2String(i, j) + '-' + hao_myIndex2String(x[0], x[1]) + '\n'
-                strOut.append(strAppend)
+        strAppend = hao_myIndex2String(i, j) + '-' + hao_myIndex2String(x[0], x[1]) + '\n'
+        strOut.append(strAppend)
 
 
 def hao_rookMoves(ii, jj):
