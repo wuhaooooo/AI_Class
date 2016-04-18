@@ -113,7 +113,33 @@ def chess_isNothing(strPiece):
 
 def chess_eval():
     # with reference to the state of the game, return the the evaluation score of the side on move - note that positive means an advantage while negative means a disadvantage
-
+    wscore = 0
+    bscore = 0
+    score = {
+        'p': 1,
+        'P': 1,
+        'r': 5,
+        'R': 5,
+        'n': 4,
+        'N': 4,
+        'b': 5,
+        'B': 5,
+        'q': 8,
+        'Q': 8,
+        'k': 10,
+        'K': 10,
+    }
+    # row = score.get(theRow, "")
+    for i in xrange(0, 6):
+        for j in xrange(0, 5):
+            if boardState[i][j].isupper():
+                wscore += score.get(boardState[i][j], 0)
+            elif boardState[i][j].islower():
+                bscore += score.get(boardState[i][j], 0)
+    if whoseTurn == 'W':
+        return wscore - bscore
+    else:
+        return bscore - wscore
     return 0
 
 
@@ -136,14 +162,6 @@ def chess_moves():
             convert x,y to a2 by calling hao_myIndex2String(y, x)
             convert x+1,y to a3 by calling hao_myIndex2String(y, x)
             append that string
-    -------------------------------------------
-    whoseTurn = 'W'
-    boardState[0] = ['k', 'q', 'b', 'n', 'r']
-    boardState[1] = ['p', 'p', 'p', 'p', 'p']
-    boardState[2] = ['.', '.', '.', '.', '.']
-    boardState[3] = ['.', '.', '.', '.', '.']
-    boardState[4] = ['P', 'P', 'P', 'P', 'P']
-    boardState[5] = ['R', 'N', 'B', 'Q', 'K']
     """
     strOut = []
     for i in xrange(0, 6):
@@ -398,13 +416,6 @@ def hao_knightMovesPrint(i, j, strOut):
 
 
 def hao_knightMoves(ii, jj):
-    # whoseTurn = 'W'
-    # boardState[0] = ['k', 'q', 'b', 'n', 'r']
-    # boardState[1] = ['p', 'p', 'p', 'p', 'p']
-    # boardState[2] = ['.', '.', '.', '.', '.']
-    # boardState[3] = ['.', '.', '.', '.', '.']
-    # boardState[4] = ['P', 'P', 'P', 'P', 'P']
-    # boardState[5] = ['R', 'N', 'B', 'Q', 'K']
     res = []
     # top four
     res.append((ii - 1, jj - 2))
