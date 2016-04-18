@@ -146,36 +146,111 @@ def chess_moves():
     boardState[5] = ['R', 'N', 'B', 'Q', 'K']
     """
     strOut = []
-    # Pawns default is lower 'p'
-    target = 'p'
-    if whoseTurn == 'W':
-        target = 'P'
+    for i in xrange(0, 6):
+        for j in xrange(0, 5):
+            if whoseTurn == 'W':
+                if boardState[i][j] == 'P':
+                    hao_pawnMovesPrint('P', i, j, strOut)
+                elif boardState[i][j] == 'R':
+                    hao_rookMovesPrint(i, j, strOut)
+                elif boardState[i][j] == 'N':
+                    hao_knightMovesPrint(i, j, strOut)
+                elif boardState[i][j] == 'B':
+                    pass
+                elif boardState[i][j] == 'Q':
+                    pass
+                elif boardState[i][j] == 'K':
+                    hao_kingMovesPrint(i, j, strOut)
 
-    for i in xrange(0, 6):
-        for j in xrange(0, 5):
-            if boardState[i][j] == target:
-                theMoves = hao_pawnMoves(target, i, j)
-                for x in theMoves:
-                    if chess_isValid(x[1], x[0]):
-                        if not chess_isOwn(boardState[x[0]][x[1]]):
-                            strAppend = hao_myIndex2String(i, j) + '-' + hao_myIndex2String(x[0], x[1]) + '\n'
-                            strOut.append(strAppend)
-    # Knight default is lower 'n'
-    target = 'n'
-    if whoseTurn == 'W':
-        target = 'N'
-    for i in xrange(0, 6):
-        for j in xrange(0, 5):
-            if boardState[i][j] == target:
-                theMoves = hao_knightMoves(i, j)
-                for x in theMoves:
-                    if chess_isValid(x[1], x[0]):
-                        if not chess_isOwn(boardState[x[0]][x[1]]):
-                            strAppend = hao_myIndex2String(i, j) + '-' + hao_myIndex2String(x[0], x[1]) + '\n'
-                            strOut.append(strAppend)
+            elif whoseTurn == 'B':
+                if boardState[i][j] == 'p':
+                    hao_pawnMovesPrint('p', i, j, strOut)
+                elif boardState[i][j] == 'r':
+                    hao_rookMovesPrint(i, j, strOut)
+                elif boardState[i][j] == 'n':
+                    hao_knightMovesPrint(i, j, strOut)
+                elif boardState[i][j] == 'b':
+                    pass
+                elif boardState[i][j] == 'q':
+                    pass
+                elif boardState[i][j] == 'k':
+                    hao_kingMovesPrint(i, j, strOut)
 
     print strOut
     return strOut
+
+def hao_rookMovesPrint(i, j, strOut):
+    theMoves = hao_rookMoves(i, j)
+    for x in theMoves:
+        if chess_isValid(x[1], x[0]):
+            if not chess_isOwn(boardState[x[0]][x[1]]):
+                strAppend = hao_myIndex2String(i, j) + '-' + hao_myIndex2String(x[0], x[1]) + '\n'
+                strOut.append(strAppend)
+
+
+def hao_rookMoves(ii, jj):
+    res = []
+    u = True
+    d = True
+    l = True
+    r = True
+    for x in range(1, 6):
+        # for up
+        if u and chess_isValid(jj, ii-x) and not chess_isOwn(boardState[ii-x][jj]):
+            res.append((ii - x, jj))
+        else:
+            u = False
+        # for down
+        if d and chess_isValid(jj, ii + x) and not chess_isOwn(boardState[ii+x][jj]):
+            res.append((ii + x, jj))
+        else:
+            d = False
+        # for left
+        if l and chess_isValid(jj - x, ii) and not chess_isOwn(boardState[ii][jj-x]):
+            res.append((ii, jj - x))
+        else:
+            l = False
+        # for right
+        if r and chess_isValid(jj + x, ii) and not chess_isOwn(boardState[ii][jj+x]):
+            res.append((ii, jj + x))
+        else:
+            r = False
+
+    return res
+
+def hao_kingMovesPrint(i, j, strOut):
+    theMoves = hao_kingMoves(i, j)
+    for x in theMoves:
+        if chess_isValid(x[1], x[0]):
+            if not chess_isOwn(boardState[x[0]][x[1]]):
+                strAppend = hao_myIndex2String(i, j) + '-' + hao_myIndex2String(x[0], x[1]) + '\n'
+                strOut.append(strAppend)
+
+def hao_kingMoves(ii, jj):
+    # generating all kings move
+    res = []
+    # ii-1
+    res.append((ii - 1, jj - 1))
+    res.append((ii - 1, jj))
+    res.append((ii - 1, jj + 1))
+    # ii
+    res.append((ii, jj - 1))
+    res.append((ii, jj + 1))
+    # ii + 1
+    res.append((ii + 1, jj - 1))
+    res.append((ii + 1, jj))
+    res.append((ii + 1, jj + 1))
+
+    return res
+
+
+def hao_knightMovesPrint(i, j, strOut):
+    theMoves = hao_knightMoves(i, j)
+    for x in theMoves:
+        if chess_isValid(x[1], x[0]):
+            if not chess_isOwn(boardState[x[0]][x[1]]):
+                strAppend = hao_myIndex2String(i, j) + '-' + hao_myIndex2String(x[0], x[1]) + '\n'
+                strOut.append(strAppend)
 
 
 def hao_knightMoves(ii, jj):
@@ -199,6 +274,15 @@ def hao_knightMoves(ii, jj):
     res.append((ii + 2, jj + 1))
     res.append((ii + 1, jj + 2))
     return res
+
+
+def hao_pawnMovesPrint(target, i, j, strOut):
+    theMoves = hao_pawnMoves(target, i, j)
+    for x in theMoves:
+        if chess_isValid(x[1], x[0]):
+            if not chess_isOwn(boardState[x[0]][x[1]]):
+                strAppend = hao_myIndex2String(i, j) + '-' + hao_myIndex2String(x[0], x[1]) + '\n'
+                strOut.append(strAppend)
 
 
 def hao_pawnMoves(theTarget, ii, jj):
