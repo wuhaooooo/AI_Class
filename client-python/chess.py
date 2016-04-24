@@ -490,12 +490,13 @@ def hao_String2myIndex(strIn):
     jj = colConvert.get(strIn[0], -1)
     return ii, jj
 
+# hw3
 def chess_movesShuffled():
     # with reference to the state of the game, determine the possible moves and shuffle them before returning them- note that you can call the chess_moves() function in here
 
     return []
 
-
+# hw3
 def chess_movesEvaluated():
     # with reference to the state of the game, determine the possible moves and sort them in order of an increasing evaluation score before returning them - note that you can call the chess_movesShuffled() function in here
     return []
@@ -550,7 +551,7 @@ def chess_moveAlphabeta(intDepth, intDuration):
 
     return 'a2-a3\n'
 
-
+# hw3
 def chess_undo():
     # undo the last move and update the state of the game / your internal variables accordingly - note that you need to maintain an internal variable that keeps track of the previous history for this
 
