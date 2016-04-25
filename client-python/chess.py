@@ -554,14 +554,16 @@ def chess_move(strIn):
 # hw4
 def chess_moveRandom():
     # perform a random move and return it - one example output is given below - note that you can call the chess_movesShuffled() function as well as the chess_move() function in here
-
-    return 'a2-a3\n'
+    moves = chess_movesShuffled()
+    chess_move(moves[0])
+    return moves[0]
 
 # hw4
 def chess_moveGreedy():
     # perform a greedy move and return it - one example output is given below - note that you can call the chess_movesEvaluated() function as well as the chess_move() function in here
-
-    return 'a2-a3\n'
+    moves = chess_movesEvaluated()
+    chess_move(moves[0])
+    return moves[0]
 
 
 def chess_moveNegamax(intDepth, intDuration):
