@@ -500,10 +500,26 @@ def chess_movesShuffled():
     random.shuffle(res)
     return res
 
+
+def getKey(item):
+    return item[0]
+
+
 # hw3
 def chess_movesEvaluated():
     # with reference to the state of the game, determine the possible moves and sort them in order of an increasing evaluation score before returning them - note that you can call the chess_movesShuffled() function in here
-    return []
+    res = chess_moves()
+    temp = []
+    for move in res:
+        chess_move(move)
+        score = chess_eval()
+        temp.append([score, move])
+        chess_undo()
+    temp = sorted(temp, key=getKey)
+    del res[:]
+    for move in temp:
+        res.append(move[1])
+    return res
 
 
 def chess_move(strIn):
