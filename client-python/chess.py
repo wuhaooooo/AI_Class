@@ -4,13 +4,14 @@ import random
 boardState = [['.' for x in range(5)] for x in range(6)]
 whoseTurn = 'W'
 gameCounter = 1
-
+movesStack = []
 
 def chess_reset():
     # reset the state of the game / your internal variables - note that this function is highly dependent on your implementation
     global boardState
     global whoseTurn
     global gameCounter
+    global movesStack
     boardState[0] = ['k', 'q', 'b', 'n', 'r']
     boardState[1] = ['p', 'p', 'p', 'p', 'p']
     boardState[2] = ['.', '.', '.', '.', '.']
@@ -19,6 +20,8 @@ def chess_reset():
     boardState[5] = ['R', 'N', 'B', 'Q', 'K']
     whoseTurn = 'W'
     gameCounter = 1
+    del movesStack[:]
+
 
 
 def chess_boardGet():
@@ -493,8 +496,9 @@ def hao_String2myIndex(strIn):
 # hw3
 def chess_movesShuffled():
     # with reference to the state of the game, determine the possible moves and shuffle them before returning them- note that you can call the chess_moves() function in here
-
-    return []
+    res = chess_moves()
+    random.shuffle(res)
+    return res
 
 # hw3
 def chess_movesEvaluated():
@@ -511,6 +515,7 @@ def chess_move(strIn):
     global gameCounter
     theMoves = chess_moves()
     ss = str(strIn).split("-")
+    board2Store = chess_boardGet()
     iStart, jStart = hao_String2myIndex(ss[0])
     iEnd, jEnd = hao_String2myIndex(ss[1])
     ss = hao_myIndex2String(iStart, jStart) + '-' + hao_myIndex2String(iEnd, jEnd) + '\n'
@@ -521,11 +526,16 @@ def chess_move(strIn):
             boardState[iEnd][jEnd] = 'q'
         if boardState[iEnd][jEnd] == 'P' and iEnd == 0:
             boardState[iEnd][jEnd] = 'Q'
+    else:
+        return
     if whoseTurn == 'W':
         whoseTurn = 'B'
     elif whoseTurn == 'B':
         whoseTurn = 'W'
         gameCounter += 1
+    movesStack.append(board2Store)
+    # print 'here is moveStack'
+    # print(movesStack)
 
 
 def chess_moveRandom():
@@ -554,5 +564,10 @@ def chess_moveAlphabeta(intDepth, intDuration):
 # hw3
 def chess_undo():
     # undo the last move and update the state of the game / your internal variables accordingly - note that you need to maintain an internal variable that keeps track of the previous history for this
+    if len(movesStack) > 0:
+        ss = str(movesStack[-1])
+        chess_boardSet(ss)
+        movesStack.pop()
 
-    pass
+
+
