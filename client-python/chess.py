@@ -55,15 +55,21 @@ def chess_winner():
     wKing = 0
     bKing = 0
 
-    if gameCounter > 40:
-        return '='
-
     for i in xrange(0, 6):
         for j in xrange(0, 5):
             if (boardState[i][j] == 'k'):
                 bKing = 1
             if (boardState[i][j] == 'K'):
                 wKing = 1
+
+    if gameCounter == 41:
+        if bKing == 1 and wKing == 0:
+            return 'B'
+        elif bKing == 0 and wKing == 1:
+            return 'W'
+
+    if gameCounter > 40:
+        return '='
 
     if bKing == 1 and wKing == 1:
         return '?'
