@@ -1,10 +1,11 @@
 import random
-
+import time
 ##########################################################
 boardState = [['.' for x in range(5)] for x in range(6)]
 whoseTurn = 'W'
 gameCounter = 1
 movesStack = []
+INFINITY = 10000
 
 def chess_reset():
     # reset the state of the game / your internal variables - note that this function is highly dependent on your implementation
@@ -136,8 +137,8 @@ def chess_eval():
         'B': 5,
         'q': 8,
         'Q': 8,
-        'k': 10,
-        'K': 10,
+        'k': 20,
+        'K': 20,
     }
     # row = score.get(theRow, "")
     for i in xrange(0, 6):
@@ -575,9 +576,44 @@ def chess_moveGreedy():
 
 def chess_moveNegamax(intDepth, intDuration):
     # perform a negamax move and return it - one example output is given below - note that you can call the the other functions in here
+    # startTime = time.time()
+    best = ''
+    score = -INFINITY
+    temp = 0
+    moves = chess_movesShuffled()
 
-    return 'a2-a3\n'
+    if intDepth >= 0:
+        print "*************temp is " + str(temp)
+        print "*************depth is " + str(intDepth)
 
+        for move in moves:
+            chess_move(move)
+            temp = -hao_negamax(intDepth-1)
+
+            chess_undo()
+            if temp > score:
+                best = move
+                score = temp
+    if best == '':
+        best = chess_moveGreedy()
+    chess_move(best)
+    return best
+
+
+def hao_negamax(intDepth):
+    if intDepth == 0 or chess_winner() != '?':
+        if chess_winner() == 'B' or chess_winner() == 'W':
+            return -INFINITY
+        return chess_eval()
+
+    score = -INFINITY
+    moves = chess_movesShuffled()
+    for move in moves:
+        # print "temp is " + str(temp)
+        chess_move(move)
+        score = max(score, -hao_negamax(intDepth - 1))
+        chess_undo()
+    return score
 
 def chess_moveAlphabeta(intDepth, intDuration):
     # perform a alphabeta move and return it - one example output is given below - note that you can call the the other functions in here
