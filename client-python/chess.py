@@ -576,7 +576,6 @@ def chess_moveNegamax(intDepth, intDuration):
     for move in moves:
         chess_move(move)
         temp = -hao_negamax(intDepth-1)
-
         chess_undo()
         if temp > score:
             best = move
@@ -590,7 +589,6 @@ def hao_negamax(intDepth):
         if chess_winner() == 'B' or chess_winner() == 'W':
             return -INFINITY
         return chess_eval()
-
     score = -INFINITY
     moves = chess_movesShuffled()
     for move in moves:
@@ -601,8 +599,35 @@ def hao_negamax(intDepth):
 
 def chess_moveAlphabeta(intDepth, intDuration):
     # perform a alphabeta move and return it - one example output is given below - note that you can call the the other functions in here
+    best = ''
+    alpha = -INFINITY
+    beta = INFINITY
+    moves = chess_movesEvaluated()
 
-    return 'a2-a3\n'
+    for move in moves:
+        chess_move(move)
+        temp = -hao_alphabeta(intDepth-1, -beta, -alpha)
+        chess_undo()
+        if temp > alpha:
+            best = move
+            alpha = temp
+    chess_move(best)
+    return best
+
+
+def hao_alphabeta(depth, alpha, beta):
+    if depth == 0 or chess_winner() != '?':
+        return chess_eval()
+    score = - INFINITY
+    moves = chess_movesShuffled()
+    for move in moves:
+        chess_move(move)
+        score = max(score, -hao_alphabeta(depth-1, -beta, -alpha))
+        chess_undo()
+        alpha = max(alpha, score)
+        if alpha >= beta:
+            break
+    return score
 
 # hw3
 def chess_undo():
