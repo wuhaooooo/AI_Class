@@ -64,22 +64,13 @@ def chess_winner():
             if (boardState[i][j] == 'K'):
                 wKing = 1
 
-    if gameCounter == 41:
-        if bKing == 1 and wKing == 0:
-            return 'B'
-        elif bKing == 0 and wKing == 1:
-            return 'W'
-
-    if gameCounter > 40:
-        return '='
-
-    if bKing == 1 and wKing == 1:
-        return '?'
-    elif (bKing == 1):
+    if bKing == 1 and wKing == 0:
         return 'B'
-    else:
+    elif bKing == 0 and wKing == 1:
         return 'W'
-
+    elif gameCounter > 40:
+        return '='
+    return '?'
 
 def chess_isValid(intX, intY):
     if intX < 0:
@@ -579,23 +570,17 @@ def chess_moveNegamax(intDepth, intDuration):
     # startTime = time.time()
     best = ''
     score = -INFINITY
-    temp = 0
-    moves = chess_movesShuffled()
+    moves = chess_movesEvaluated()
+    if intDepth == 0:
+        return  
+    for move in moves:
+        chess_move(move)
+        temp = -hao_negamax(intDepth-1)
 
-    if intDepth >= 0:
-        print "*************temp is " + str(temp)
-        print "*************depth is " + str(intDepth)
-
-        for move in moves:
-            chess_move(move)
-            temp = -hao_negamax(intDepth-1)
-
-            chess_undo()
-            if temp > score:
-                best = move
-                score = temp
-    if best == '':
-        best = chess_moveGreedy()
+        chess_undo()
+        if temp > score:
+            best = move
+            score = temp
     chess_move(best)
     return best
 
@@ -609,7 +594,6 @@ def hao_negamax(intDepth):
     score = -INFINITY
     moves = chess_movesShuffled()
     for move in moves:
-        # print "temp is " + str(temp)
         chess_move(move)
         score = max(score, -hao_negamax(intDepth - 1))
         chess_undo()
