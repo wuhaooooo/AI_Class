@@ -6,6 +6,7 @@ whoseTurn = 'W'
 gameCounter = 1
 movesStack = []
 INFINITY = 10000
+timeLeft = 0
 
 def chess_reset():
     # reset the state of the game / your internal variables - note that this function is highly dependent on your implementation
@@ -118,18 +119,18 @@ def chess_eval():
     wscore = 0
     bscore = 0
     score = {
-        'p': 1,
-        'P': 1,
-        'r': 5,
-        'R': 5,
-        'n': 4,
-        'N': 4,
-        'b': 5,
-        'B': 5,
-        'q': 8,
-        'Q': 8,
-        'k': 20,
-        'K': 20,
+        'p': 5,
+        'P': 5,
+        'r': 12,
+        'R': 12,
+        'n': 11,
+        'N': 11,
+        'b': 9,
+        'B': 9,
+        'q': 15,
+        'Q': 15,
+        'k': 30,
+        'K': 30,
     }
     # row = score.get(theRow, "")
     for i in xrange(0, 6):
@@ -597,20 +598,32 @@ def hao_negamax(intDepth):
         chess_undo()
     return score
 
-def chess_moveAlphabeta(intDepth, intDuration):
+breakingtimes = 0
+def chess_moveAlphabeta(Depth, intDuration=10000):
     # perform a alphabeta move and return it - one example output is given below - note that you can call the the other functions in here
+    global breakingtimes
+    intDepth = 4
     best = ''
     alpha = -INFINITY
     beta = INFINITY
+    timeThisRound = intDuration/(41-gameCounter) + 3000
+    currentTime = int(round(time.time() * 1000))
     moves = chess_movesEvaluated()
-
+    if gameCounter > 2 and gameCounter <= 20:
+        intDepth = 5
+        timeThisRound = 25000
     for move in moves:
+    	if timeThisRound-(int(round(time.time() * 1000))-currentTime) < 0:
+            breakingtimes += 1
+            print("breaking due to the timebound " + str(breakingtimes))
+            break
         chess_move(move)
         temp = -hao_alphabeta(intDepth-1, -beta, -alpha)
         chess_undo()
         if temp > alpha:
             best = move
             alpha = temp
+    print("round:%s time spend "%(gameCounter) + str(((((time.time() * 1000))-currentTime))/1000))
     chess_move(best)
     return best
 
@@ -619,7 +632,7 @@ def hao_alphabeta(depth, alpha, beta):
     if depth == 0 or chess_winner() != '?':
         return chess_eval()
     score = - INFINITY
-    moves = chess_movesShuffled()
+    moves = chess_moves()
     for move in moves:
         chess_move(move)
         score = max(score, -hao_alphabeta(depth-1, -beta, -alpha))
