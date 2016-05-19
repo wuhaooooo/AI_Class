@@ -530,9 +530,11 @@ def chess_move(strIn):
     global gameCounter
     theMoves = chess_moves()
     ss = str(strIn).split("-")
-    board2Store = chess_boardGet()
+    #board2Store = chess_boardGet()
     iStart, jStart = hao_String2myIndex(ss[0])
     iEnd, jEnd = hao_String2myIndex(ss[1])
+    toStore = [iStart, jStart, iEnd, jEnd, boardState[iStart][jStart], boardState[iEnd][jEnd]]
+    #print toStore
     ss = hao_myIndex2String(iStart, jStart) + '-' + hao_myIndex2String(iEnd, jEnd) + '\n'
     if ss in theMoves:
         boardState[iEnd][jEnd] = boardState[iStart][jStart]
@@ -548,7 +550,7 @@ def chess_move(strIn):
     elif whoseTurn == 'B':
         whoseTurn = 'W'
         gameCounter += 1
-    movesStack.append(board2Store)
+    movesStack.append(toStore)
 
 # hw4
 def chess_moveRandom():
@@ -632,9 +634,18 @@ def hao_alphabeta(depth, alpha, beta):
 # hw3
 def chess_undo():
     # undo the last move and update the state of the game / your internal variables accordingly - note that you need to maintain an internal variable that keeps track of the previous history for this
+    global boardState
+    global whoseTurn
+    global gameCounter
     if len(movesStack) > 0:
-        ss = str(movesStack[-1])
-        chess_boardSet(ss)
+        iStart, jStart, iEnd, jEnd, start, end = movesStack[-1]
+        boardState[iStart][jStart] = start
+        boardState[iEnd][jEnd] = end
+        if whoseTurn == 'W':
+            whoseTurn = 'B'
+            gameCounter -= 1
+        elif whoseTurn == 'B':
+            whoseTurn = 'W'
         movesStack.pop()
 
 
