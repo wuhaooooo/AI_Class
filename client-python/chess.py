@@ -531,9 +531,11 @@ def chess_move(strIn):
     global gameCounter
     theMoves = chess_moves()
     ss = str(strIn).split("-")
-    board2Store = chess_boardGet()
+    #board2Store = chess_boardGet()
     iStart, jStart = hao_String2myIndex(ss[0])
     iEnd, jEnd = hao_String2myIndex(ss[1])
+    toStore = [iStart, jStart, iEnd, jEnd, boardState[iStart][jStart], boardState[iEnd][jEnd]]
+    #print toStore
     ss = hao_myIndex2String(iStart, jStart) + '-' + hao_myIndex2String(iEnd, jEnd) + '\n'
     if ss in theMoves:
         boardState[iEnd][jEnd] = boardState[iStart][jStart]
@@ -549,7 +551,7 @@ def chess_move(strIn):
     elif whoseTurn == 'B':
         whoseTurn = 'W'
         gameCounter += 1
-    movesStack.append(board2Store)
+    movesStack.append(toStore)
 
 # hw4
 def chess_moveRandom():
@@ -599,21 +601,26 @@ def hao_negamax(intDepth):
     return score
 
 breakingtimes = 0
-def chess_moveAlphabeta(Depth, intDuration=10000):
+def chess_moveAlphabeta(intDepth, intDuration=10000):
     # perform a alphabeta move and return it - one example output is given below - note that you can call the the other functions in here
     global breakingtimes
-    intDepth = 4
+    flag = 0 # 0 for test, 1 for tournament
+    timeThisRound = 9999999
+    currentTime = int(round(time.time() * 1000))
+    if intDepth < 0:
+        flag = 1
+        intDepth = 4
+        timeThisRound = intDuration/(41-gameCounter) + 3000
+
     best = ''
     alpha = -INFINITY
     beta = INFINITY
-    timeThisRound = intDuration/(41-gameCounter) + 3000
-    currentTime = int(round(time.time() * 1000))
     moves = chess_movesEvaluated()
-    if gameCounter > 2 and gameCounter <= 20:
+    if gameCounter > 2 and gameCounter <= 20 and flag == 1:
         intDepth = 5
         timeThisRound = 25000
     for move in moves:
-    	if timeThisRound-(int(round(time.time() * 1000))-currentTime) < 0:
+    	if flag == 1 and timeThisRound-(int(round(time.time() * 1000))-currentTime) < 0:
             breakingtimes += 1
             print("breaking due to the timebound " + str(breakingtimes))
             break
@@ -645,9 +652,18 @@ def hao_alphabeta(depth, alpha, beta):
 # hw3
 def chess_undo():
     # undo the last move and update the state of the game / your internal variables accordingly - note that you need to maintain an internal variable that keeps track of the previous history for this
+    global boardState
+    global whoseTurn
+    global gameCounter
     if len(movesStack) > 0:
-        ss = str(movesStack[-1])
-        chess_boardSet(ss)
+        iStart, jStart, iEnd, jEnd, start, end = movesStack[-1]
+        boardState[iStart][jStart] = start
+        boardState[iEnd][jEnd] = end
+        if whoseTurn == 'W':
+            whoseTurn = 'B'
+            gameCounter -= 1
+        elif whoseTurn == 'B':
+            whoseTurn = 'W'
         movesStack.pop()
 
 
