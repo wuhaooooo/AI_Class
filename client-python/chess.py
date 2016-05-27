@@ -638,6 +638,7 @@ def chess_moveAlphabeta(intDepth, intDuration=10000):
 def hao_alphabeta(depth, alpha, beta):
     if depth == 0 or chess_winner() != '?':
         return chess_eval()
+    # load from the transposition table
     score = - INFINITY
     moves = chess_moves()
     for move in moves:
@@ -647,6 +648,7 @@ def hao_alphabeta(depth, alpha, beta):
         alpha = max(alpha, score)
         if alpha >= beta:
             break
+    # store into the transposition table
     return score
 
 # hw3
