@@ -604,23 +604,32 @@ breakingtimes = 0
 def chess_moveAlphabeta(intDepth, intDuration=10000):
     # perform a alphabeta move and return it - one example output is given below - note that you can call the the other functions in here
     global breakingtimes
-    flag = 0 # 0 for test, 1 for tournament
+    # flag = 0 # 0 for test, 1 for tournament
     timeThisRound = 9999999
     currentTime = int(round(time.time() * 1000))
+
     if intDepth < 0:
-        flag = 1
-        intDepth = 4
-        timeThisRound = intDuration/(41-gameCounter) + 3000
+        # flag = 1
+        if gameCounter < 5:
+            intDepth = 5
+            timeThisRound = 10000
+        # elif gameCounter < 10:
+        #     intDepth = 5
+        #     timeThisRound = 25000
+        elif gameCounter < 20:
+            intDepth = 5
+            timeThisRound = 20000
+        else:
+            intDepth = 4
+            timeThisRound = intDuration / (41 - gameCounter) + 4000
 
     best = ''
     alpha = -INFINITY
     beta = INFINITY
     moves = chess_movesEvaluated()
-    if gameCounter > 2 and gameCounter <= 20 and flag == 1:
-        intDepth = 5
-        timeThisRound = 25000
+
     for move in moves:
-    	if flag == 1 and timeThisRound-(int(round(time.time() * 1000))-currentTime) < 0:
+        if timeThisRound-(int(round(time.time() * 1000))-currentTime) < 0:
             breakingtimes += 1
             print("breaking due to the timebound " + str(breakingtimes))
             break
