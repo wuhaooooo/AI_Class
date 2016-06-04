@@ -59,6 +59,8 @@ class Zobrist:
         else:
             Zobrist.zobristNumber ^= Zobrist.ZB
 
+    def getZValue(self):
+        return Zobrist.zobristNumber
 
 
 

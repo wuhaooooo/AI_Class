@@ -1,5 +1,8 @@
 import random
 import time
+import ZobristHashing
+import Transposition
+
 ##########################################################
 boardState = [['.' for x in range(5)] for x in range(6)]
 whoseTurn = 'W'
@@ -7,6 +10,7 @@ gameCounter = 1
 movesStack = []
 INFINITY = 10000
 timeLeft = 0
+TTable = {}
 
 def chess_reset():
     # reset the state of the game / your internal variables - note that this function is highly dependent on your implementation
@@ -535,6 +539,10 @@ def chess_move(strIn):
     iStart, jStart = hao_String2myIndex(ss[0])
     iEnd, jEnd = hao_String2myIndex(ss[1])
     toStore = [iStart, jStart, iEnd, jEnd, boardState[iStart][jStart], boardState[iEnd][jEnd]]
+
+    oldSource = boardState[iStart][jStart]
+    oldDest = boardState[iEnd][jEnd]
+
     #print toStore
     ss = hao_myIndex2String(iStart, jStart) + '-' + hao_myIndex2String(iEnd, jEnd) + '\n'
     if ss in theMoves:
@@ -546,11 +554,18 @@ def chess_move(strIn):
             boardState[iEnd][jEnd] = 'Q'
     else:
         return
+
+    newSource = boardState[iStart][jStart]
+    newDest = boardState[iEnd][jEnd]
+
     if whoseTurn == 'W':
         whoseTurn = 'B'
     elif whoseTurn == 'B':
         whoseTurn = 'W'
         gameCounter += 1
+
+    ZobristHashing.update(strIn, oldSource, newSource, oldDest, newDest, whoseTurn)
+
     movesStack.append(toStore)
 
 # hw4
@@ -638,7 +653,11 @@ def chess_moveAlphabeta(intDepth, intDuration=10000):
 def hao_alphabeta(depth, alpha, beta):
     if depth == 0 or chess_winner() != '?':
         return chess_eval()
+
     # load from the transposition table
+    TValue = TTable.get(ZobristHashing.getZValue())
+    if TValue != None
+    #
     score = - INFINITY
     moves = chess_moves()
     for move in moves:
@@ -649,6 +668,8 @@ def hao_alphabeta(depth, alpha, beta):
         if alpha >= beta:
             break
     # store into the transposition table
+
+
     return score
 
 # hw3
