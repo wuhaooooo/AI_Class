@@ -628,10 +628,15 @@ def chess_moveAlphabeta(intDepth, intDuration=10000):
     timeThisRound = 9999999
     currentTime = int(round(time.time() * 1000))
     if intDepth < 0:
-        flag = 1
-        intDepth = 4
-        timeThisRound = intDuration/(41-gameCounter) + 3000
-
+        if gameCounter < 5:
+            intDepth = 5
+            timeThisRound = 15000
+        elif gameCounter < 20:
+            intDepth = 5
+            timeThisRound = 25000
+        else:
+            intDepth = 4
+            timeThisRound = intDuration / (41 - gameCounter) + 4000
     best = ''
     alpha = -INFINITY
     beta = INFINITY
@@ -640,7 +645,7 @@ def chess_moveAlphabeta(intDepth, intDuration=10000):
         intDepth = 5
         timeThisRound = 25000
     for move in moves:
-    	if flag == 1 and timeThisRound-(int(round(time.time() * 1000))-currentTime) < 0:
+    	if timeThisRound-(int(round(time.time() * 1000))-currentTime) < 0:
             breakingtimes += 1
             print("breaking due to the timebound " + str(breakingtimes))
             break
@@ -650,7 +655,7 @@ def chess_moveAlphabeta(intDepth, intDuration=10000):
         if temp > alpha:
             best = move
             alpha = temp
-    #print("round:%s time spend "%(gameCounter) + str(((((time.time() * 1000))-currentTime))/1000))
+    print("round:%s time spend "%(gameCounter) + str(((((time.time() * 1000))-currentTime))/1000))
     chess_move(best)
     return best
 
