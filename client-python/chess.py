@@ -20,6 +20,7 @@ def chess_reset():
     global gameCounter
     global movesStack
     global zNumber
+    global TTable
     boardState[0] = ['k', 'q', 'b', 'n', 'r']
     boardState[1] = ['p', 'p', 'p', 'p', 'p']
     boardState[2] = ['.', '.', '.', '.', '.']
@@ -29,6 +30,7 @@ def chess_reset():
     whoseTurn = 'W'
     gameCounter = 1
     zNumber = ZobristHashing.Zobrist(chess_boardGet())
+    TTable.clear()
     del movesStack[:]
 
 
@@ -648,20 +650,32 @@ def chess_moveAlphabeta(intDepth, intDuration=10000):
         if temp > alpha:
             best = move
             alpha = temp
-    print("round:%s time spend "%(gameCounter) + str(((((time.time() * 1000))-currentTime))/1000))
+    #print("round:%s time spend "%(gameCounter) + str(((((time.time() * 1000))-currentTime))/1000))
     chess_move(best)
     return best
 
 
 def hao_alphabeta(depth, alpha, beta):
+    oldAlpha = alpha
+    global TTable
     if depth == 0 or chess_winner() != '?':
         return chess_eval()
 
     # load from the transposition table
-    TValue = TTable.get(ZobristHashing.getZValue())
-    print TValue
-    # if TValue != None
-    #
+    TValue = TTable.get(zNumber.getZValue())
+    if TValue != None:
+        print "move used**************"
+        ss, ff, dd= TValue.getALL()
+        if dd > depth:
+            if ff == 'EXACT':
+                print "table used**************"
+                return ss
+            elif ff == 'LOWER':
+                alpha = max(alpha, ss)
+            elif ff == 'UPPER':
+                beta = min(beta, ss)
+
+    #########################################
     score = - INFINITY
     moves = chess_moves()
     for move in moves:
@@ -671,8 +685,17 @@ def hao_alphabeta(depth, alpha, beta):
         alpha = max(alpha, score)
         if alpha >= beta:
             break
-    # store into the transposition table
 
+
+    # store into the transposition table
+    FF = 'EXACT'
+    if score <= oldAlpha:
+        FF = 'UPPER'
+    elif score >= beta:
+        FF = 'LOWER'
+    ttStore = Transposition.Transposition(score, FF, depth)
+    TTable[zNumber.getZValue()] = ttStore
+    #########################################
 
     return score
 

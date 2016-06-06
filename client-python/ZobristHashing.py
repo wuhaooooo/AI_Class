@@ -57,10 +57,9 @@ class Zobrist:
         self.XOR(newSource, iStart, jStart)
         self.XOR(oldDest, iEnd, jEnd)
         self.XOR(newDest, iEnd, jEnd)
-        if whoNext == 'W':
-            Zobrist.zobristNumber ^= Zobrist.ZW
-        else:
-            Zobrist.zobristNumber ^= Zobrist.ZB
+
+        Zobrist.zobristNumber ^= Zobrist.ZW
+        Zobrist.zobristNumber ^= Zobrist.ZB
 
     def getZValue(self):
         return Zobrist.zobristNumber

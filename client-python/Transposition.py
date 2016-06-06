@@ -1,10 +1,9 @@
 class Transposition:
 
-    def __init__(self, score, alpha, beta, flag):
+    def __init__(self, score, flag, depth):
         self.score = score
-        self.alpha = alpha
-        self.beta = beta
         self.flag = flag
+        self.depth = depth
 
     def getALL(self):
-        return [self.score, self.alpha, self.beta, self.flag]
+        return [self.score, self.flag, self.depth]
