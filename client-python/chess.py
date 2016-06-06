@@ -11,6 +11,7 @@ movesStack = []
 INFINITY = 10000
 timeLeft = 0
 TTable = {}
+zNumber = ZobristHashing.Zobrist
 
 def chess_reset():
     # reset the state of the game / your internal variables - note that this function is highly dependent on your implementation
@@ -18,6 +19,7 @@ def chess_reset():
     global whoseTurn
     global gameCounter
     global movesStack
+    global zNumber
     boardState[0] = ['k', 'q', 'b', 'n', 'r']
     boardState[1] = ['p', 'p', 'p', 'p', 'p']
     boardState[2] = ['.', '.', '.', '.', '.']
@@ -26,6 +28,7 @@ def chess_reset():
     boardState[5] = ['R', 'N', 'B', 'Q', 'K']
     whoseTurn = 'W'
     gameCounter = 1
+    zNumber = ZobristHashing.Zobrist(chess_boardGet())
     del movesStack[:]
 
 
@@ -564,7 +567,7 @@ def chess_move(strIn):
         whoseTurn = 'W'
         gameCounter += 1
 
-    # ZobristHashing.update(strIn, oldSource, newSource, oldDest, newDest, whoseTurn)
+    zNumber.update(strIn, oldSource, newSource, oldDest, newDest, whoseTurn)
 
     movesStack.append(board2Store)
 
@@ -655,7 +658,8 @@ def hao_alphabeta(depth, alpha, beta):
         return chess_eval()
 
     # load from the transposition table
-    # TValue = TTable.get(ZobristHashing.getZValue())
+    TValue = TTable.get(ZobristHashing.getZValue())
+    print TValue
     # if TValue != None
     #
     score = - INFINITY
