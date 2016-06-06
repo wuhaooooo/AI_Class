@@ -631,11 +631,14 @@ def chess_moveAlphabeta(intDepth, intDuration=10000):
         if gameCounter < 5:
             intDepth = 5
             timeThisRound = 15000
+        elif gameCounter < 10:
+            intDepth = 6
+            timeThisRound = 25000
         elif gameCounter < 20:
             intDepth = 5
             timeThisRound = 25000
         else:
-            intDepth = 4
+            intDepth = 5
             timeThisRound = intDuration / (41 - gameCounter) + 4000
     best = ''
     alpha = -INFINITY
