@@ -540,10 +540,10 @@ def chess_move(strIn):
     global gameCounter
     theMoves = chess_moves()
     ss = str(strIn).split("-")
-    board2Store = chess_boardGet()
+    # board2Store = chess_boardGet()
     iStart, jStart = hao_String2myIndex(ss[0])
     iEnd, jEnd = hao_String2myIndex(ss[1])
-    # toStore = [iStart, jStart, iEnd, jEnd, boardState[iStart][jStart], boardState[iEnd][jEnd]]
+    toStore = [iStart, jStart, iEnd, jEnd, boardState[iStart][jStart], boardState[iEnd][jEnd], strIn]
 
     oldSource = boardState[iStart][jStart]
     oldDest = boardState[iEnd][jEnd]
@@ -569,9 +569,9 @@ def chess_move(strIn):
         whoseTurn = 'W'
         gameCounter += 1
 
-    zNumber.update(strIn, oldSource, newSource, oldDest, newDest, whoseTurn)
+    zNumber.update(strIn, oldSource, newSource, oldDest, newDest)
 
-    movesStack.append(board2Store)
+    movesStack.append(toStore)
 
 # hw4
 def chess_moveRandom():
@@ -666,6 +666,7 @@ def hao_alphabeta(depth, alpha, beta):
     if TValue != None:
         print "move used**************"
         ss, ff, dd= TValue.getALL()
+        print ff
         if dd > depth:
             if ff == 'EXACT':
                 print "table used**************"
@@ -693,6 +694,7 @@ def hao_alphabeta(depth, alpha, beta):
         FF = 'UPPER'
     elif score >= beta:
         FF = 'LOWER'
+
     ttStore = Transposition.Transposition(score, FF, depth)
     TTable[zNumber.getZValue()] = ttStore
     #########################################
@@ -702,10 +704,31 @@ def hao_alphabeta(depth, alpha, beta):
 # hw3
 def chess_undo():
     # undo the last move and update the state of the game / your internal variables accordingly - note that you need to maintain an internal variable that keeps track of the previous history for this
+    global boardState
+    global whoseTurn
+    global gameCounter
     if len(movesStack) > 0:
-        ss = str(movesStack[-1])
-        chess_boardSet(ss)
+        iStart, jStart, iEnd, jEnd, start, end, oldMove = movesStack[-1]
+
+        # undo z number
+        ss = str(oldMove).split('-')
+        undoMove = ss[1] + '-' + ss[0]
+        oldSource = boardState[iStart][jStart]
+        newSource = start
+        oldDest = boardState[iEnd][jEnd]
+        newDest = end
+        zNumber.update(undoMove, oldSource, newSource, oldDest, newDest)
+        ################################################################
+
+        boardState[iStart][jStart] = start
+        boardState[iEnd][jEnd] = end
+        if whoseTurn == 'W':
+            whoseTurn = 'B'
+            gameCounter -= 1
+        elif whoseTurn == 'B':
+            whoseTurn = 'W'
         movesStack.pop()
+
 
 
 
