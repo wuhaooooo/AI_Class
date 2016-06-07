@@ -672,17 +672,18 @@ def hao_alphabeta(depth, alpha, beta):
     # load from the transposition table
     TValue = TTable.get(zNumber.getZValue())
     if TValue != None:
-        print "move used**************"
-        ss, ff, dd= TValue.getALL()
+        print "score found!"
+        ss, ff, dd = TValue.getALL()
         print ff
         if dd > depth:
             if ff == 'EXACT':
-                print "table used**************"
                 return ss
             elif ff == 'LOWER':
                 alpha = max(alpha, ss)
             elif ff == 'UPPER':
                 beta = min(beta, ss)
+            if alpha >= beta:
+                return ss
 
     #########################################
     score = - INFINITY
